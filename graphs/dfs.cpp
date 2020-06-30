@@ -15,7 +15,7 @@ public:
 
     void DFS();
 
-    void DFSIter();
+    void DFSIter(int);
 };
 
 Graph::Graph(int v)
@@ -68,30 +68,25 @@ void Graph::DFS()
 }
 
 // TODO THIS IS WRONG ITER AND ALSO UPDATE THIS IN ALGORITHMS FOLDER
-void Graph::DFSIter()
+void Graph::DFSIter(int s)
 {
-    bool *vis = new bool[V];
-    for (int i = 0; i < V; i++)
-        vis[i] = false;
+    vector<bool> vis(V, false);
 
-    for (int i = 0; i < V; i++)
+    stack<int> st;
+    st.push(s);
+    while (!st.empty())
     {
-        stack<int> st;
-        st.push(i);
-        while (st.size())
+        auto n = st.top();
+        st.pop();
+        if (!vis[n])
         {
-            auto n = st.top();
-            st.pop();
-            if (!vis[n])
-            {
-                vis[n] = true;
-                cout << n << ' ';
-            }
-            for (auto j = adj[n].begin(); j != adj[n].end(); ++j)
-            {
-                if (!vis[*j])
-                    st.push(*j);
-            }
+            vis[n] = true;
+            cout << n << ' ';
+        }
+        for (auto j = adj[n].begin(); j != adj[n].end(); ++j)
+        {
+            if (!vis[*j])
+                st.push(*j);
         }
     }
 }
@@ -101,17 +96,14 @@ int main()
     // Create a graph given in the above diagram
     Graph g(4);
     g.addEdge(0, 1);
+    g.addEdge(1, 0);
     g.addEdge(0, 2);
-    g.addEdge(1, 2);
-    g.addEdge(2, 0);
-    g.addEdge(2, 3);
-    g.addEdge(3, 3);
-
+    g.addEdge(0, 3);
     cout << "Following is Depth First Traversal"
-            " (starting from vertex 2) \n";
-    // g.DFS();
+            " (starting from vertex 0) \n";
+    g.DFS();
 
-    g.DFSIter();
+    // g.DFSIter(0);
 
     return 0;
 }
